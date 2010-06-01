@@ -193,6 +193,9 @@ class Downloader(object):
         print "%d urls in %s" % (len(urls), title)
         for url in urls:
             fileName = os.path.join(dir, self.makeFileSystemSafe(self.getFileFromURL(url)))
+            if os.path.exists(fileName):
+                print "File %s already exists." % fileName
+                continue
             self.currentFile = copy.copy(fileName)
             print "%s -> %s" % (url, fileName)
 
