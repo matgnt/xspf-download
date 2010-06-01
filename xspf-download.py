@@ -152,9 +152,11 @@ class Downloader(object):
         url = None
         opts = None
         args = None
+
         optionparser = OptionParser()
         optionparser.add_option("-x", "--xspf-playlist", help="XSPF playlist URL.", dest="xspf_url")
         optionparser.add_option("-m", "--m3u-playlist", help="M3U playlist URL.", dest="m3u_url")
+        optionparser.add_option("-s", "--file-name-substring", help="Must-Have-Substring to choose the track to download.", dest="file_name_substr")
         (opts, args) = optionparser.parse_args();
 
         if opts.xspf_url:
@@ -189,6 +191,12 @@ class Downloader(object):
         print "%d urls in %s" % (len(urls), title)
         for url in urls:
             fileName = os.path.join(dir, self.makeFileSystemSafe(self.getFileFromURL(url)))
+
+            if opts.file_name_substr:
+                if not opts.file_name_substr in fileName:
+                        print "File %s doesn't match your file name substring %s." % (fileName, opts.file_name_substr)
+                        continue
+
             if os.path.exists(fileName):
                 print "File %s already exists." % fileName
                 continue
