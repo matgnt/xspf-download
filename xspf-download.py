@@ -33,6 +33,7 @@
 import sys, urllib2, os, getopt, copy, re
 from xml.sax import make_parser, handler, SAXParseException
 from time import time as now
+from optparse import OptionParser
 
 bufSize = 4096
 numTimesInWindow = 32
@@ -146,39 +147,33 @@ class Downloader(object):
 
         return url
 
-    def printUsage(self):
-        print "Usage: %s [-m] <playlist file>" % sys.argv[0]
-        print
-        print "Options:"
-        print "-m  --  Parse file as a M3U file (normally an XSPF file is expected)"
-        sys.exit(-1)
-
     def download(self):
         parser = None
+        url = None
         opts = None
         args = None
-        try:
-            opts, args = getopt.getopt(sys.argv[1:], "m")
-        except:
-            self.printUsage()
-            return False
+        optionparser = OptionParser()
+        optionparser.add_option("-x", "--xspf-playlist", help="XSPF playlist URL.", dest="xspf_url")
+        optionparser.add_option("-m", "--m3u-playlist", help="M3U playlist URL.", dest="m3u_url")
+        (opts, args) = optionparser.parse_args();
 
-        if len(args) == 0:
-            self.printUsage()
-            return False
-
-        if not len(opts):
+        if opts.xspf_url:
+            url = opts.xspf_url
             parser = XSPFParser()
-        else:
+        elif opts.m3u_url:
+            url = opts.m3u_url
             parser = M3UParser()
+        else:
+            optionparser.print_help()
+            sys.exit(-1)
 
-        if not parser.parseFile(args[0]):
+        if not parser.parseFile(url):
             print "Parsing the playlist failed."
             return False
 
         title = parser.getTitle()
         if not title:
-            title = self.getNameFromFile(args[0])
+            title = self.getNameFromFile(url)
 
         # This neeeds to be made filesystem safe
         dir = self.makeFileSystemSafe(title)
