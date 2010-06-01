@@ -1,6 +1,5 @@
 #!/usr/bin/python 
 #
-#   xspf-download.py version 0.1.0
 #
 #   Copyright (c) 2004 Robert Kaye
 #       All rights reserved.
