@@ -2,6 +2,7 @@
 #
 #
 #   Copyright (c) 2004 Robert Kaye
+#   Copyright (c) 2010 Matthias Guenther
 #       All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without 
