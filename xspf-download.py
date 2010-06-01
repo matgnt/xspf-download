@@ -269,17 +269,21 @@ class Downloader(object):
         print
         print "Download complete."
 
-downloader = Downloader()
-try:
-    if downloader.download():
-        sys.exit(0);
-    sys.exit(-1);
-
-except KeyboardInterrupt:
-    print "\nInterrupted.",
+######
+# main
+######
+if __name__ == "__main__":
+    downloader = Downloader()
     try:
-        os.unlink(downloader.getCurrentFile())
-        print " Removed", downloader.getCurrentFile()
-    except:
-        print
-    sys.exit(-1)
+        if downloader.download():
+            sys.exit(0);
+        sys.exit(-1);
+    
+    except KeyboardInterrupt:
+        print "\nInterrupted.",
+        try:
+            os.unlink(downloader.getCurrentFile())
+            print " Removed", downloader.getCurrentFile()
+        except:
+            print
+        sys.exit(-1)
